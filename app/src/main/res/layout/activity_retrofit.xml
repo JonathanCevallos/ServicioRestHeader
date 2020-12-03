@@ -4,25 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".RetrofitActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="108dp"
-        tools:layout_editor_absoluteY="362dp">
+        tools:layout_editor_absoluteX="171dp"
+        tools:layout_editor_absoluteY="346dp">
 
-        <Button
-            android:id="@+id/btnVolley"
+        <TextView
+            android:id="@+id/txtLista"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CONSULTA (VOLLEY)" />
-
-        <Button
-            android:id="@+id/btnRetrofit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Consulta (RETROFIT)" />
+            android:layout_height="match_parent"
+            android:textSize="18sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

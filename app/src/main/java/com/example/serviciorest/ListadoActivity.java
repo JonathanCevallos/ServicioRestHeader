@@ -19,7 +19,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,12 +34,12 @@ public class ListadoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado);
         lvDatos = (ListView) findViewById(R.id.lvDatos);
-        mQueue = Volley.newRequestQueue(this);
-        invocarServicio();
+        //mQueue = Volley.newRequestQueue(this);
+        GETVolley();
     }
 
-    private void invocarServicio(){
-        String DATA_URL = "https://api-uat.kushkipagos.com/transfer/v1/bankList";
+    private void GETVolley(){
+        String DATA_URL = "https://my-json-server.typicode.com/JonathanCevallos/JSON/db";
         final ProgressDialog loading = ProgressDialog.show(this, "Por favor espere...", "Actualizando datos",false,false);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, DATA_URL, null, new Response.Listener<JSONObject>() {
             @Override
@@ -51,37 +50,47 @@ public class ListadoActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+                loading.dismiss();
+                Toast.makeText(getApplicationContext(), "Error request:"+error.getMessage(),Toast.LENGTH_LONG).show();
             }
         }) {
+            //@org.jetbrains.annotations.NotNull
             @Override
             public Map getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
                 headers.put("Content-Type", "application/json");
-                headers.put("name", "public-merchant-id");
-                headers.put("Authorization", "84e1d0de1fbf437e9779fd6a52a9ca18");
+              //  headers.put("name", "public-merchant-id");
+                headers.put("Public-Merchant-Id", "84e1d0de1fbf437e9779fd6a52a9ca18");
                 return headers;
             }
         };
-        mQueue.add(jsonObjectRequest);
+        //mQueue.add(jsonObjectRequest);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jsonObjectRequest);
     }
+
+
+
 
     private void showListView(JSONObject obj){
         try {
-            List<String> contes = new ArrayList<>();
-            JSONArray lista = obj.optJSONArray("contenidos");
+            List<String> contes = new ArrayList<String>();
+            JSONArray lista = obj.optJSONArray("Bancos");
             for(int i=0; i<lista.length();i++){
                 JSONObject json_data = lista.getJSONObject(i);
-                String conte = json_data.getString("code")+" "+ json_data.getString("name");
+                String conte = json_data.getString("id")+" "+ json_data.getString("title");
                 contes.add(conte);
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,contes);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,contes);
             lvDatos.setAdapter(adapter);
 
         } catch (Exception ex) {
             Toast.makeText(this,"Error al cargar Lista" + ex.getMessage(), Toast.LENGTH_LONG).show();
         }finally {
         }
+
+
+
 
     }
 
